@@ -1,0 +1,382 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1DDE71D5-DEF3-41AB-A0E9-62A0535FE0B4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CLVS.Dal.Common</RootNamespace>
+    <AssemblyName>CLVS.Dal.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="CommonDB.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CommonDB.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CommonDB.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CommonDB.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CommonDB.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="EBCFG.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EBUSR.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ECLGF.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ECLGT.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ECLOG.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EESUB.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ELCFG.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EMERR.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EMID.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EMMSG.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EMSTT.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EPASM.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EPOPR.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EPPKG.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EPPRC.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EPSRV.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OBSSp_GetServiceRecord_Result.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ORTT.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SARI.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SCAB.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SCFG.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SCLC.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SCSP.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SCUC.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SDRC.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SDRF.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SDRO.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SDRQ.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SDRR.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEULA.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEVT.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWAD.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWBU.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWC.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWDB.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWDQ.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWDV.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWHW.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWIC.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWLA.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWSN.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWST.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWSY.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWU.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWU1.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWU2.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWU3.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWUA.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SEWUT.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SFDK.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SFMD.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SHLP.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SHQR.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SINF.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SLIC.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SLOG.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SLOGR.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SLSC.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SLSD.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SLSP.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SLSPP.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SMSG.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SPAR.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SRGC.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SWDP.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SWEI.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SWFQ.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SWID.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SWPD.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SWR.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXRCD.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXRCO.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXRDB.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXRDF.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXREL.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXRET.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXREV.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXRFU.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXRIN.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXRME.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXRNO.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXROA.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXROB.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXRPD.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXRPR.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXRRE.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXRRO.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXRSS.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SXRTE.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TmSp_GetServerTime_Result.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TSCD.cs">
+      <DependentUpon>CommonDB.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="CommonDB.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>CommonDB.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="CommonDB.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CommonDB.edmx</DependentUpon>
+      <LastGenOutput>CommonDB.Context.cs</LastGenOutput>
+    </None>
+    <None Include="CommonDB.edmx.diagram">
+      <DependentUpon>CommonDB.edmx</DependentUpon>
+    </None>
+    <None Include="CommonDB.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CommonDB.edmx</DependentUpon>
+      <LastGenOutput>CommonDB.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CLSV.Model\CLVS.Model.csproj">
+      <Project>{92d3bcbc-b95a-4060-a7e1-1dccd9d6cc2f}</Project>
+      <Name>CLVS.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

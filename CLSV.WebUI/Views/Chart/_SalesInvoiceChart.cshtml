@@ -1,0 +1,62 @@
+﻿<script type="text/javascript">
+    $(window).resize(function () {
+        if (plotSalesInvoice != null || plotSalesInvoice != "undefined")
+            plotSalesInvoice.replot({ resetAxes: true });
+    });
+    var plotSalesInvoice;
+    $(document).ready(function () {
+        $.ajax({
+            url: "http://vs13sql12ba4.cloudapp.net/api/SalesInvoiceChart",
+            //url: "http://localhost:2/api/SalesInvoiceChart",
+            type: "GET",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+
+                BuildInvoiceChart(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                var msg = "<p>Failed: " + jqXHR + "</p><p>" + errorThrown + "</p><p>Status: " + textStatus + "</p>";
+                BootstrapDialog.alert(msg);
+            }
+        });
+        //$(document).ajaxStart(ShowLoadingEffect()).ajaxStop($.unblockUI);
+
+
+    });
+
+    function BuildInvoiceChart(data) {
+        $('#statusSalesInvoice').hide();
+        var line1 = ConvertChartObjectToLine(data[0]["ChartAxisList"]);
+        var line2 = ConvertChartObjectToLine(data[1]["ChartAxisList"]);
+        console.log(data);
+         plotSalesInvoice = $.jqplot('salesInvioceChart', [line1, line2], {
+             legend: { show: true, location: 'ne', labels: ["Sales","Invoices"] },
+            series: [{ renderer: $.jqplot.BarRenderer }],
+            axesDefaults: {
+                tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                tickOptions: {
+                    fontFamily: 'Georgia',
+                    fontSize: '10pt',
+                    angle: -50
+                }
+            },
+            axes: {
+                xaxis: {
+                    renderer: $.jqplot.CategoryAxisRenderer
+                }
+            }
+        });
+
+    }
+</script>
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">Sales Invoice Chart</div>
+    <div class="panel-body">
+        <div id="salesInvioceChart"></div>
+        <div id="statusSalesInvoice">Loading....</div>
+    </div>
+</div>
+

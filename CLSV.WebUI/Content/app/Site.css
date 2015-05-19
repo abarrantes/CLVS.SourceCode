@@ -1,0 +1,22 @@
+﻿.height150 {
+    height:100px;
+}
+
+.itemWidth {
+    min-width:70px;
+    font-size:small;
+    text-align:center;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.descWidth {
+    min-width:150px;
+}
+
+.responsiveTable {
+    overflow:auto;
+}
+.tableStyle {
+    border:solid;
+    border-color:red;
+}

@@ -1,0 +1,15 @@
+﻿<link href="~/Content/jquery/jquery.jqplot.css" rel="stylesheet" />
+<script src="~/Scripts/libraries/jquery.jqplot.min.js"></script>
+<script src="~/Scripts/libraries/jqplot.barRenderer.min.js"></script>
+<script src="~/Scripts/libraries/jqplot.categoryAxisRenderer.min.js"></script>
+<script src="~/Scripts/libraries/jqplot.pointLabels.min.js"></script>
+
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12 text-center">
+        @Html.Partial("~/Views/Chart/_SalesBarChart.cshtml")
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 text-center">
+        @Html.Partial("~/Views/Chart/_SalesInvoiceChart.cshtml")
+    </div>
+</div>
+

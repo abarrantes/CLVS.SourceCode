@@ -1,0 +1,479 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<link href="~/Content/bootstrap/bootstrap-combobox.css" rel="stylesheet" />
+<script src="~/Scripts/libraries/bootstrap-combobox.js"></script>
+<script type="text/javascript">
+   
+    var glCustomerList;
+    var glItemList;
+    var glMasterItems = ['ItemCode', 'ItemName','Quantity', 'Price', 'LineTotal', 'TaxCode', 'TaxAmount', 'Whs', 'StockT', 'StockO', 'StockW'];
+    var glMasterInputItems = ['Quantity'];
+    var glMasterCalItems = ['LineTotal', 'TaxAmount'];
+    var glRowCount = 0;
+   //var input
+   // $(document).ajaxStart(ShowLoadingEffect()).ajaxStop($.unblockUI);
+    $(document).ready(function () {
+        
+        $('.combobox').combobox({ bsVersion: '3' });
+        $(function () {
+            //$("#datepickerCurrent").datepicker({ dateFormat: 'DD, d MM, yy' }).datepicker("setDate", new Date());
+            //$("#datepickerDelivery").datepicker({ dateFormat: 'DD, d MM, yy' });
+            $("#datepickerCurrent").datepicker().datepicker("setDate", new Date());
+            $("#datepickerDelivery").datepicker();
+        });
+        LoadControls();
+
+        $('#customerNameSelect').on('change', function () {
+            var val = $(this).val();
+            if (val != "")
+            {
+                var customerCode = Enumerable.From(glCustomerList)
+                            .Where(function (x) {return x.CustomerName==val })
+                            .Select(function (x) { return x.CustomerCode })
+                            .ToArray()[0];
+                $('#customerCodeSelect').focus().val(customerCode);
+                $('#customerCodeSelect').combobox('refresh');
+                ClearItemTable();
+                LoadItems(customerCode);
+            }            
+        });
+
+        $('#customerCodeSelect').on('change', function () {
+            var val = $(this).val();
+            if (val != "") {
+                var customerName = Enumerable.From(glCustomerList)
+                            .Where(function (x) { return x.CustomerCode == val })
+                            .Select(function (x) { return x.CustomerName })
+                            .ToArray()[0];
+                $('#customerNameSelect').focus().val(customerName);
+                $('#customerNameSelect').combobox('refresh');
+                ClearItemTable();
+                LoadItems(val);
+            }
+        });
+    });
+
+    function ClearItemTable()
+    {
+        $('#itemTable tbody').remove();
+        $('#customerNameSelect').empty();
+        $('#customerCodeSelect').empty();
+        glRowCount = 0;
+    }
+
+    function Validate()
+    {
+        if ($('#customerNameSelect').focus().val() == '') {
+            BootstrapDialog.alert("Please Select Customer");
+            return false;
+        }
+        if ($("#datepickerDelivery").val() == '')
+        {
+            BootstrapDialog.alert("Please Select delivery date");
+            return false;
+        }
+        if (glRowCount == 0)
+        {
+            BootstrapDialog.alert("There is not item to create. Please create an item");
+            return false;
+        }
+        if (glRowCount == 1) {
+            BootstrapDialog.alert("Please select an item in Row 1");
+            return false;
+        }
+        for(var i=1;i<glRowCount;i++)
+        {
+            if ($('#ItemCode' + i).val() == '')
+            {
+                BootstrapDialog.alert("Please Select Item in row number: " + i);
+                return false;
+            }
+            if ($('#Quantity' + i).val() == '') {
+                BootstrapDialog.alert("Please Select Quantity in row number: " + i);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function LineTotalCalculate(thisRef)
+    {
+        var numID = thisRef.id.substr(8, thisRef.id.length);
+        var quan = $('#' + thisRef.id).val();
+        if (quan == '') {
+            $("#LineTotal" + numID).val('');
+            $("#TaxAmount" + numID).val('');
+        }
+        else {
+            var price=$("#Price" + numID).val();
+            var lineTotal=parseInt(quan) * parseFloat(price);
+            $("#LineTotal" + numID).val(lineTotal);
+            var cusCode = $("#ItemCode" + numID).val();
+            var rate = Enumerable.From(glItemList)
+                            .Where(function (x) { return x.ItemCode == cusCode })
+                            .Select(function (x) { return x.Rate })
+                            .ToArray()[0];
+            var calulatedRate = lineTotal * (parseFloat(rate) / 100);
+            $("#TaxAmount" + numID).val(calulatedRate);
+        }
+        var total = 0.0;
+        var tax = 0.0;
+        var grand = 0.0;
+        for (var i = 1; i < glRowCount; i++)
+        {
+            if ($("#LineTotal" + i).val() != '')
+            {
+                total += parseFloat($("#LineTotal" + i).val());
+            }
+            if ($("#TaxAmount" + i).val() != '') {
+                tax += parseFloat($("#TaxAmount" + i).val());
+            }
+        }
+        $("#total").val(total);
+        $("#tax").val(tax);
+        $("#grandTotal").val(total + tax);
+       
+    }
+
+    function LoadControls()
+    {
+        $.ajax({
+            url: "http://vs13sql12ba4.cloudapp.net/api/Customer",
+            type: "GET",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+                glCustomerList = data;
+                
+                $("#customerNameSelect").removeAttr("disabled");
+                $("#customerCodeSelect").removeAttr("disabled");
+                PopulateCustomer(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                var msg = "<p>Failed: " + jqXHR + "</p><p>" + errorThrown + "</p><p>Status: " + textStatus + "</p>";
+                BootstrapDialog.alert(msg);
+            }
+        });   
+    }
+
+    function LoadItems(customerCode)
+    {
+        $('#itemTable').append("<tr><td>Loading...</td></td>");
+        $.ajax({
+            url: "http://vs13sql12ba4.cloudapp.net/api/Item?CustomerCode=" + customerCode,
+            type: "GET",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+                glItemList = data;
+                $('#itemTable tbody').remove();
+                GenerateRow();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                var msg = "<p>Failed: " + jqXHR + "</p><p>" + errorThrown + "</p><p>Status: " + textStatus + "</p>";
+                BootstrapDialog.alert(msg);
+            }
+        });
+    }
+
+    function ItemSelectionChange(item)
+    {
+        var itemid = $(item).attr("id");
+        var itemVal = $(item).val();
+        if (itemVal != '') {
+            var numID = itemid.substr(8, itemid.length);
+            var selItem = Enumerable.From(glItemList)
+                           .Where(function (x) { return x.ItemCode == itemVal })
+                           .Select(function (x) { return x })
+                           .ToArray()[0];
+            $("#ItemName" + numID).val(selItem['ItemName']);
+            $("#Price" + numID).val(selItem['Price']);
+            $("#TaxCode" + numID).val(selItem['TaxCode']);
+            $("#Whs" + numID).val(selItem['Whs']);
+            $("#StockT" + numID).val(selItem['StockT']);
+            $("#StockO" + numID).val(selItem['StockO']);
+            $("#StockW" + numID).val(selItem['StockW']);
+            $("#LineTotal" + numID).val('');
+            $("#Quantity" + numID).val('');
+            $('#Quantity' + numID).removeAttr("disabled");
+            if (parseInt(numID) == parseInt(glRowCount))
+                GenerateRow();
+        }
+        else {
+            $("#ItemName" + numID).val('');
+            $("#Price" + numID).val('');
+            $("#TaxCode" + numID).val('');
+            $("#Whs" + numID).val('');
+            $("#StockT" + numID).val('');
+            $("#StockO" + numID).val('');
+            $("#StockW" + numID).val('');
+            $("#LineTotal" + numID).val('');
+            $("#Quantity" + numID).val('');
+            $('#Quantity' + numID).attr("disabled", "disabled");
+           
+        }
+    }
+
+    function PopulateCustomer(data)
+    {
+        $('#customerNameSelect').empty();
+        $('#customerNameSelect').append("<option value=''>Select Customer Name</option>");
+        $('#customerCodeSelect').append("<option value=''>Select Customer Code</option>");
+        for (var key in data)
+        {
+            $('#customerNameSelect').append("<option value='" + data[key]["CustomerName"] + "'>" + data[key]["CustomerName"] + "</option>");
+            $('#customerCodeSelect').append("<option value='" + data[key]["CustomerCode"] + "'>" + data[key]["CustomerCode"] + "</option>");
+        }
+       // $('#customerNameSelect').removeAttr("disabled");
+        $('#customerNameSelect').combobox('refresh');
+        $('#customerCodeSelect').combobox('refresh');
+    }
+
+    function GenerateRow()
+    {
+        var str = '<tr>';
+        glRowCount += 1;
+            for (var key in glMasterItems)
+            {
+                if (glMasterItems[key] == 'ItemCode') {
+                    str += '<td style="min-width:150px;">' + GenerateItem(glItemList, glMasterItems[key] + glRowCount) + '</td>';
+                }
+                else if (glMasterItems[key] == 'Quantity')
+                {
+                    str += '<td><input type="text"  class="form-control input-sm itemWidth" disabled="disabled" id="' + glMasterItems[key] + glRowCount + '" onchange="LineTotalCalculate(this)"></td>';
+                }
+                else if (glMasterItems[key] == 'ItemName')
+                {
+                    str += '<td ><input type="text" disabled="disabled" class="form-control input-sm descWidth" id="' + glMasterItems[key] + glRowCount + '"></td>';
+                }
+                else {
+                    str += '<td ><input type="text" disabled="disabled" class="form-control input-sm itemWidth" id="' + glMasterItems[key] + glRowCount + '"></td>';
+                }
+            }
+            str += '</tr>';
+            //alert(str);
+            //console.log(str);
+            $('#itemTable').append(str);
+            $('#ItemCode' + glRowCount).combobox('refresh');
+       
+    }
+
+    function GenerateItem(data, itemid)
+    {
+        var str=' <div class="combobox-container">';
+        str += '<select onchange="ItemSelectionChange(this)"  id="' + itemid + '" class="combobox form-control input-sm" style="display: none; min-width:100px;" >';
+        str+= '<option value="" selected="selected"></option>';
+        for(var key in data)
+        {
+            str += '<option value="' + data[key]["ItemCode"] + '">' + data[key]["ItemCode"] + '</option>';
+        }
+        str += '</select></div>';
+        //console.log(str);
+        return str;
+       
+    }
+
+    function SubmiteOrder()
+    {
+        if (!Validate())
+            return;
+
+        var itemList = [];
+        for (i = 1; i <= glRowCount; i++)
+        {
+            if ($('#ItemCode' + i).val() != "")
+                itemList.push(CreateItemObject(i));
+        }
+        var dataobj = JSON.stringify({
+            "SalesLine": itemList,
+            "CustomerCode": $("#customerCodeSelect").val(),
+            "DocDueDate": $("#datepickerDelivery").val()
+
+        });
+        console.log(dataobj);
+        $.support.cors = true;
+        $.ajax({
+            url: "http://vs13sql12ba4.cloudapp.net/api/SalesOrder",
+            dataType: "json",
+            cache: false,
+            type: "POST",
+            async: false,
+            data: dataobj,
+            contentType: "application/json",
+            success: function (ReturnMsg) {
+                BootstrapDialog.alert(ReturnMsg);
+                ClearItemTable();
+                $("#datepickerDelivery").val('');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                var msg = "<p>Failed: " + jqXHR + "</p><p>" + errorThrown + "</p><p>Status: " + textStatus + "</p>";
+                BootstrapDialog.alert(msg);
+            }
+        });
+    }
+
+    function CreateItemObject(index)
+    {
+        var dataobj = {
+            "ItemCode": $("#ItemCode" + index).val(),
+            "ItemDescription": "",
+            "UnitPrice": "1",
+            "Quantity": $("#Quantity" + index).val()
+        };
+        return dataobj;
+    }
+</script>
+
+<div>
+    <br />
+    <div class="container">
+        <div class="row-fluid clearfix">
+            <div class="col-md-4 col-sm-5 text-center">
+                <div class="well" id="wellCustomerCode" >
+                    <div class="combobox-container">
+                        <select id="customerNameSelect" class="combobox form-control" disabled="disabled" style="display: none;">
+                            <option value="" selected="selected">Loading...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-2 clearfix text-center">
+
+            </div>
+            <div class="col-md-4 col-sm-5 clearfix text-center">
+                <div class="well">
+                    <div class="row-fluid clearfix">
+                        <table>
+                            <tr>
+                                <td><label for="datepickerCurrent"  class="label label-primary">Current Date</label></td>
+                                <td><input type='text' class="form-control" disabled="disabled" id="datepickerCurrent" /></td>
+                            </tr>
+                        </table>                     
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid clearfix">
+            <div class="col-md-4 col-sm-5 clearfix text-center">
+                <div class="well" id="wellCustomerCode" >
+                    <div class="combobox-container">
+                        <select id="customerCodeSelect" class="combobox form-control" disabled="disabled" style="display: none;">
+                            <option value="" selected="selected">Loading...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-2 clearfix text-center">
+
+            </div>
+            <div class="col-md-4 col-sm-4 clearfix text-center">
+                <div class="well clearfix">
+                    <div class="row-fluid clearfix">
+                        <table>
+                            <tr>
+                                <td><label for="datepickerDelivery" class="label label-primary">Delivery Date</label></td>
+                                <td><input type='text' class="form-control" id="datepickerDelivery" /></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid clearfix">
+            <div class="col-md-12 col-sm-12 clearfix text-center responsiveTable">
+                @*<div class="panel panel-default">
+            <div class="panel-heading">Sales items</div>
+            <div class="panel-body">*@
+                @*<div class="table-responsive">*@
+                <table class="table table-responsive table-hover table-bordered" id="itemTable">
+                    <thead>
+                        <tr class="well text-center itemWidth">
+                            <th>Item</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>LineTotal</th>
+                            <th>Tax</th>
+                            <th>TaxAmount</th>
+                            <th>Whs</th>
+                            <th>StockW</th>
+                            <th>StockT</th>
+                            <th>StockO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       
+                    </tbody>
+                </table>
+                <div class="row-fluid clearfix">
+                    <div class="col-md-5 col-sm-5 clearfix text-center">
+                        <div class="well" id="wellCustomerCode" disabled="disabled">
+                            <table class="table table-hover table-bordered" >
+                                <tr>
+                                    <td>
+                                        <label for="remark" class="label label-primary">Remark</label>
+                                    </td>
+                                    <td>
+                                        <textarea type='text' class="form-control" id="remark" style="height:120px;" />
+                                    </td>
+                                </tr>
+                            </table>   
+</div>
+                    </div>
+                    <div class="col-md-2 col-sm-1 clearfix text-center">
+
+                    </div>
+                    <div class="col-md-5 col-sm-5 clearfix text-center">
+                        <div class="well clearfix">
+                            <table class="table table-hover table-bordered">
+                                <tr>
+                                    <td>
+                                        <label for="total" class="label label-primary">Total</label>
+                                    </td>
+                                    <td>
+                                        <input type='text' class="form-control" disabled="disabled" id="total" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="tax" class="label label-primary">Tax</label>
+                                    </td>
+                                    <td>
+                                        <input type='text' class="form-control" disabled="disabled" id="tax" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="grandTotal" class="label label-primary">Total after tax</label>
+                                    </td>
+                                    <td>
+                                        <input type='text' class="form-control" disabled="disabled" id="grandTotal" />
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+                @*</div>*@
+                <div class="text-left">
+                    <button class="btn btn-primary" id="submitOrder" onclick="SubmiteOrder()">Submit Order</button>
+                </div>
+                @*</div>
+                </div>
+
+            </div>*@
+
+
+            </div>
+        @*<div class="row-fluid clearfix">
+           
+
+
+        </div>*@
+    </div>
+        
+</div>
+</div>

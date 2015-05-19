@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="CLVS.WebUI.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2014-06.2.4">
+  <Role name="CLVS.WebUI">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="upinder" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBlQYJKoZIhvcNAQcDoIIBhjCCAYICAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEE9CDcBKdVepTfyT2R5WXAQwDQYJKoZIhvcNAQEBBQAEggEAN/DjWSj2ZWEDNlIklB0w4u9cEfvM8E3ihpP+mbPJd+v2vXTLUc62pqrTwK696HUYOLauvpe/Qz4z/vCE7RswnwpYZGvhNDWBkz1b+VGqIRKfq2Oy8xoQ80z5yRP7r5QxBHtGJZ6IbpOqYyv3tbn/Ee/oOtYqkHHjAqmoOyTgMJTuyEzReiRZOMwj0p++GuvH6sOIlqsWvoDl/CXzjUKp5lZt2p5Qe1IqmF9ff9PeyinM/79Y7nrBNDIvm3+vOTV4uyym4fAdKAyT/KSkrlQTBXF6DOuj3QTHx9CJH8Jze2Q1cUpZvSyrZPAgdq3VpPj1zwxW48mIUA5h30FzCOD45zArBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECLVc7WBDMGEpgAh/2J/BK0073g==" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2016-03-07T23:59:59.0000000+05:30" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
+    </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="B565C76A850E8CEFF41BD0740076B0401050D9EB" thumbprintAlgorithm="sha1" />
+    </Certificates>
+  </Role>
+</ServiceConfiguration>

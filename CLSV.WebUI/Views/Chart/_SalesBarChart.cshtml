@@ -1,0 +1,64 @@
+﻿<script type="text/javascript">
+    $(window).resize(function () {
+        if (plotSalesBar != null || plotSalesBar != "undefined")
+            plotSalesBar.replot({ resetAxes: true });
+    });
+    var plotSalesBar;
+    $(document).ready(function () {
+        $.ajax({
+            url: "http://vs13sql12ba4.cloudapp.net/api/SalesBarChart",
+            //url: "http://localhost:2/api/SalesBarChart",
+            type: "GET",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+
+                BuildSalesBarChart(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                var msg = "<p>Failed: " + jqXHR + "</p><p>" + errorThrown + "</p><p>Status: " + textStatus + "</p>";
+                BootstrapDialog.alert(msg);
+            }
+        });
+        //$(document).ajaxStart(ShowLoadingEffect()).ajaxStop($.unblockUI);
+
+
+    });
+    function BuildSalesBarChart(data) {
+        $('#statusSalesBar').hide();
+        var line1 = ConvertChartObjectToLine(data);
+        console.log(line1);
+        $.jqplot.config.enablePlugins = true;
+        plotSalesBar = $.jqplot('salesBarChart', [line1], {
+            legend: { show: true, location: 'ne',labels: ["Sales"] },
+            series: [{ renderer: $.jqplot.BarRenderer }],
+            axesDefaults: {
+                tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                tickOptions: {
+                    fontFamily: 'Georgia',
+                    fontSize: '10pt',
+                    angle: -50
+                }
+            },
+            axes: {
+                xaxis: {
+                    renderer: $.jqplot.CategoryAxisRenderer
+                }
+            }
+        });
+    }
+</script>
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">Sales Bar Chart</div>
+    <div class="panel-body">
+        <div>
+            <div id="salesBarChart"></div>
+            <div id="statusSalesBar">Loading....</div>
+        </div>
+    </div>
+</div>
+
+
+
